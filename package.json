@@ -2,7 +2,7 @@
   "name": "hiring_people",
   "version": "1.0.0",
   "description": "<h1>#Hiring_People</h1>\r <h2>READ.ME - EM CONSTRUÇÃO -> As orientações a seguir são para\r     o projeto em si.\r </h2>\r <p>\r     Repositório para a criação de um sistema CRUD, com tecnologias como Node.js e\r     Express\r     para o cadastro de novas\r     pessoas que podem ser contratadas por uma empresa fictícia.\r </p>",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "mocha tests/**/*.test.js --exit",
     "start": "node src/server.js",

@@ -64,5 +64,20 @@ app.put('/funcionarios/:id', async (req, res) => {
 
   return res.status(200).json(updateCurrEmp);
 });
+// Deletando um funcionário através de seu index: 
+
+app.delete('/funcionarios/:id', async (req, res) => {
+  const { id } = req.params;
+  const allEmployees = await readEmployees();
+
+  const currEmployee = allEmployees.findIndex((employee) => employee.id === +id);
+  if (currEmployee === -1) {
+    return res.status(404).json({ message: 'Employee not found!' });
+  }
+  allEmployees.splice(currEmployee, 1);
+  const newEmployees = JSON.stringify(allEmployees);
+  await fs.writeFile(employeesPath, newEmployees);
+  res.status(200).end();
+});
 
 module.exports = app;

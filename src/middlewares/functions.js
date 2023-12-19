@@ -1,11 +1,12 @@
 const fs = require('fs').promises;
-const { join } = require('path');
+const path = require('path');
+
+const employeesPath = path.resolve(__dirname, '../files/employees.json');
 
 async function readEmployees() {
-    const path = '../files/employees.json';
     try {
     const employees = await fs
-        .readFile(join(__dirname, path), 'utf-8');
+        .readFile(employeesPath);
     const convEmployees = JSON.parse(employees);
     return convEmployees;
     } catch (e) {
@@ -15,11 +16,25 @@ async function readEmployees() {
 
 async function findEmployee(id) {
     const allEmployees = await readEmployees();
-    const { employees } = allEmployees;
-    return employees.find((employee) => employee.id === id);
+    return allEmployees.find((employee) => employee.id === id);
+}
+
+async function addEmployee(nome, cargo, departamento, salario) {
+    const allEmployees = await readEmployees();
+    const newEmployee = {
+        id: allEmployees.length > 0 ? allEmployees[allEmployees.length - 1].id + 1 : 1,
+        nome,
+        cargo,
+        departamento,
+        salario,
+    };
+    const newAllEmployees = [...allEmployees, newEmployee];
+    await fs.writeFile(employeesPath, JSON.stringify(newAllEmployees));
+    return newAllEmployees;
 }
 
 module.exports = {
     readEmployees, 
     findEmployee,
+    addEmployee,
 };

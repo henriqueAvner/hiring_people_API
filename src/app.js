@@ -2,7 +2,15 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 
-const { readEmployees, findEmployee, addEmployee } = require('./middlewares/functions');
+const { readEmployees, findEmployee, addEmployee } = require('./helpers/functions');
+const generateToken = require('./helpers/utils/generateToken');
+const validadeToken = require('./helpers/utils/validadeToken');
+const validadeLogin = require('./files/middlewares/validadeLogin');
+const validatePass = require('./files/middlewares/validatePass');
+const validateName = require('./files/middlewares/validateName');
+const validateOffice = require('./files/middlewares/validateOffice');
+const validateDepartment = require('./files/middlewares/validateDepartment');
+const validateWage = require('./files/middlewares/validadeWage');
 
 const employeesPath = path.resolve(__dirname, './files/employees.json');
 
@@ -26,7 +34,7 @@ app.get('/funcionarios', async (_req, res) => {
 
 // Retorna todos os funcionários baseados em seu departamento:
 
-app.get('/funcionarios/search', async (req, res) => {
+app.get('/funcionarios/search', validadeToken, async (req, res) => {
   const { dep } = req.query;
   const allEmployees = await readEmployees();
   if (!dep) {
@@ -54,9 +62,19 @@ app.get('/funcionarios/:id', async (req, res) => {
     res.status(200).json(currEmployee);
 });
 
+app.post('/login', validadeLogin, validatePass, (_req, res) => {
+  const token = generateToken();
+  return res.status(200).json({ token });
+});
+
 // Adiciona um novo funcionário a empresa:
 
-app.post('/funcionarios', async (req, res) => {
+app.post('/funcionarios', validadeToken,
+ validateName,
+ validateOffice,
+ validateDepartment,
+ validateWage,
+ async (req, res) => {
    try {
     const { nome, cargo, departamento, salario } = req.body;
     await addEmployee(nome, cargo, departamento, salario);
@@ -68,7 +86,12 @@ app.post('/funcionarios', async (req, res) => {
 
 // Editando um funcionário da empresa:
 
-app.put('/funcionarios/:id', async (req, res) => {
+app.put('/funcionarios/:id', validadeToken,
+validateName,
+ validateOffice,
+ validateDepartment,
+ validateWage,
+async (req, res) => {
   const { id } = req.params;
   const { nome, cargo, departamento, salario } = req.body;
   const allEmployees = await readEmployees();
@@ -87,7 +110,7 @@ app.put('/funcionarios/:id', async (req, res) => {
 
 // Deletando um funcionário através de seu index: 
 
-app.delete('/funcionarios/:id', async (req, res) => {
+app.delete('/funcionarios/:id', validadeToken, async (req, res) => {
   const { id } = req.params;
   const allEmployees = await readEmployees();
   const currEmployee = allEmployees.findIndex((employee) => employee.id === +id);

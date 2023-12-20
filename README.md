@@ -17,21 +17,23 @@ Repositório para a criação de um sistema CRUD, utilizando tecnologias como No
 - [x] Armazene esses dados em arrays ou objetos no arquivo do servidor.
 
 ## Middleware de Autenticação Simples:
-- [ ] Adicione um middleware para simular a autenticação básica.
-- [ ] Pode ser algo tão simples quanto verificar a presença de um token fictício nos cabeçalhos da solicitação.
+- [x] Adicione um middleware para simular a autenticação básica.
+- [x] Pode ser algo tão simples quanto verificar a presença de um token fictício nos cabeçalhos da solicitação.
 
 ## Implementação do CRUD:
 - [x] Desenvolva a lógica para as operações CRUD dentro das rotas.
 - [x] Por exemplo, ao receber uma solicitação para criar um novo candidato (POST /candidates), adicione o novo candidato à sua estrutura de dados.
 
 ## Validações:
-- [ ] Adicione verificações básicas de validação nos dados recebidos nas solicitações (por exemplo, se os campos obrigatórios estão presentes).
+- [x] Adicione verificações básicas de validação nos dados recebidos nas solicitações (por exemplo, se os campos obrigatórios estão presentes).
 
 ## Teste de Rotas:
 - [x] Realize testes nas rotas para garantir que estão funcionando conforme esperado.
 
 ## Middleware de Erros:
-- [ ] Implemente um middleware de tratamento de erros para lidar com solicitações inválidas ou erros internos.
+- [x] Implemente um middleware de tratamento de erros para lidar com solicitações inválidas ou erros internos.
 
+## Criação de testes:
+- [ ] Crie testes para a funcionalidade de todo o sistema
 ## Documentação da API:
 - [ ] Considere adicionar documentação básica para suas rotas, indicando os parâmetros esperados e os formatos de resposta.

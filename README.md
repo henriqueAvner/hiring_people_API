@@ -1,4 +1,4 @@
-# Hiring_People
+# Hiring_People_API
 ## README - EM CONSTRUÇÃO
 As orientações a seguir são para o projeto em si.
 

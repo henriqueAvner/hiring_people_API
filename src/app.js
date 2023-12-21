@@ -59,7 +59,7 @@ app.get('/funcionarios/:id', async (req, res) => {
  return res
     .status(404).json({ message: 'Employee not found' }); 
 }
-    res.status(200).json(currEmployee);
+    res.status(200).json({ currEmployee });
 });
 
 app.post('/login', validadeLogin, validatePass, (_req, res) => {

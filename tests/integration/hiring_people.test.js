@@ -49,4 +49,28 @@ describe('testando a API hiring_people', () => {
             expect(response.body).to.deep.equal({ message: 'Employee not found' });
         });
     });
+    // eslint-disable-next-line max-lines-per-function
+    describe('Usando o método GET em /funcionarios/search para o departamento', () => {
+        it('Com o parâmetro "search?dep=ti", retorna todos os funcionários de TI', async () => {
+            const response = await chai.request(app)
+            .get('/funcionarios/search?dep=ti');
+            expect(response.status).to.be.equal(200);
+            expect(response.body).to.have.length(3);
+            expect(response.body[0]).to.deep.include({
+                departamento: 'TI',
+            });
+        });
+        it('Ao passar nenhum parâmetro, retorna todos os funcionários da empresa', async () => {
+            const response = await chai.request(app)
+            .get('/funcionarios/search');
+            expect(response.status).to.be.equal(200);
+            expect(response.body).to.deep.equal(mockAllEmployees);
+        });
+        it('Ao passar um parâmetro inválido, o endpoint retorna um array vazio', async () => {
+            const response = await chai.request(app)
+            .get('/funcionarios/search?dep=invalidParameter');
+            expect(response.status).to.be.equal(200);
+            expect(response.body).to.deep.equal([]);
+        });
+    });
 });

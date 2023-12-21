@@ -34,7 +34,7 @@ app.get('/funcionarios', async (_req, res) => {
 
 // Retorna todos os funcionários baseados em seu departamento:
 
-app.get('/funcionarios/search', validadeToken, async (req, res) => {
+app.get('/funcionarios/search', async (req, res) => {
   const { dep } = req.query;
   const allEmployees = await readEmployees();
   if (!dep) {

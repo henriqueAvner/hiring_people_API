@@ -7,16 +7,17 @@ const { expect } = chai;
 const chaiHttp = require('chai-http');
 const app = require('../../src/app');
 const employeesJson = require('../../src/files/employees.json');
-const mockAllEmployees = require('../mockFilePeole.json');
+const mockAllEmployees = require('../../src/files/mockFilePeole.json');
 
-const mockFile = JSON.stringify(employeesJson);
+const mockFileGET = JSON.stringify(employeesJson);
+const mockFilePOST = JSON.stringify(mockAllEmployees);
 
 chai.use(chaiHttp);
 
-describe('TESTANDO A API', () => {
+describe('TESTANDO A API - REQUISIÇÃO GET', () => {
     beforeEach(() => {
         sinon.stub(fs.promises, 'readFile')
-    .resolves(mockFile);
+    .resolves(mockFileGET);
     });
     
     afterEach(() => {
@@ -76,6 +77,17 @@ describe('TESTANDO A API', () => {
             expect(response.status).to.be.equal(200);
             expect(response.body).to.deep.equal([]);
         });
+    });
+});
+
+describe('TESTANDO A API - REQUISIÇÃO POST', () => {
+    beforeEach(() => {
+        sinon.stub(fs.promises, 'readFile')
+    .resolves(mockFilePOST);
+    });
+    
+    afterEach(() => {
+        sinon.restore();
     });
     describe('Utilizando o método POST em /login', () => {
         it('Ao passar dados válidos, é retornado um token ao usuário', async () => {

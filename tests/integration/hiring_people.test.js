@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 const chai = require('chai');
 const sinon = require('sinon');
 const fs = require('fs');
@@ -12,8 +13,7 @@ const mockFile = JSON.stringify(employeesJson);
 
 chai.use(chaiHttp);
 
-// eslint-disable-next-line max-lines-per-function
-describe('testando a API hiring_people', () => {
+describe('TESTANDO A API', () => {
     beforeEach(() => {
         sinon.stub(fs.promises, 'readFile')
     .resolves(mockFile);
@@ -38,7 +38,8 @@ describe('testando a API hiring_people', () => {
             .get('/funcionarios/5');
             expect(response.status).to.be.equal(200);
             expect(response.body.currEmployee).to.deep.equal(mockAllEmployees[4]);
-            expect(response.body.currEmployee).to.deep.include({
+            expect(response.body.currEmployee).to.deep
+            .include({
                id: 5,
             });
         });
@@ -46,17 +47,19 @@ describe('testando a API hiring_people', () => {
             const response = await chai.request(app)
             .get('/funcionarios/345');
             expect(response.status).to.be.equal(404);
-            expect(response.body).to.deep.equal({ message: 'Employee not found' });
+            expect(response.body).to.deep
+            .equal({ message: 'Employee not found' });
         });
     });
-    // eslint-disable-next-line max-lines-per-function
+
     describe('Usando o método GET em /funcionarios/search para o departamento', () => {
         it('Com o parâmetro "search?dep=ti", retorna todos os funcionários de TI', async () => {
             const response = await chai.request(app)
             .get('/funcionarios/search?dep=ti');
             expect(response.status).to.be.equal(200);
             expect(response.body).to.have.length(3);
-            expect(response.body[0]).to.deep.include({
+            expect(response.body[0]).to.deep
+            .include({
                 departamento: 'TI',
             });
         });
@@ -64,13 +67,55 @@ describe('testando a API hiring_people', () => {
             const response = await chai.request(app)
             .get('/funcionarios/search');
             expect(response.status).to.be.equal(200);
-            expect(response.body).to.deep.equal(mockAllEmployees);
+            expect(response.body).to.deep
+            .equal(mockAllEmployees);
         });
         it('Ao passar um parâmetro inválido, o endpoint retorna um array vazio', async () => {
             const response = await chai.request(app)
             .get('/funcionarios/search?dep=invalidParameter');
             expect(response.status).to.be.equal(200);
             expect(response.body).to.deep.equal([]);
+        });
+    });
+    describe('Utilizando o método POST em /login', () => {
+        it('Ao passar dados válidos, é retornado um token ao usuário', async () => {
+            const response = await chai.request(app)
+            .post('/login')
+            .send({ email: 'avnerhdpb@gmail.com', pass: '123456' });
+            expect(response.status).to.be.equal(200);
+            expect(response.body).to.have
+            .property('token');
+        });
+        it('Ao passar um email inválido, o usuário é orientado sobre o erro', async () => {
+            const response = await chai.request(app)
+            .post('/login')
+            .send({ email: 'avnerhdpb.com', pass: '123456' });
+            expect(response.status).to.be.equal(400);
+            expect(response.body).to.deep
+            .equal({ mesage: 'O campo e-mail deve ser preenchido corretamente!' });
+        });
+        it('Ao não passar nenhum e-mail, uma mensagem de erro é retornada', async () => {
+            const response = await chai.request(app)
+            .post('/login')
+            .send({ pass: '123456' });
+            expect(response.status).to.be.equal(400);
+            expect(response.body).to.deep.equal({ message: 'O campo e-mail é obrigatório' });
+        });
+        it('Ao passar uma senha inválida, o usuário é orientado sobre o erro', async () => {
+            const response = await chai.request(app)
+            .post('/login')
+            .send({ email: 'avnerhdpb@gmail.com', pass: '56' });
+            expect(response.status).to.be.equal(400);
+            expect(response.body).to.deep
+            .equal({ message: 'O campo password deve conter pelo menos 6 caracteres' });
+        });
+        it('Ao não passar nenhuma senha, uma mensagem de erro é retornada', async () => {
+            const response = await chai.request(app)
+            .post('/login')
+            .send({ email: 'avnerhdpb@gmail.com' });
+            expect(response.status).to.be.equal(400);
+            expect(response.body).to.deep
+            .equal({ message: 'O campo password é obrigatório' });
         });
     });
 });

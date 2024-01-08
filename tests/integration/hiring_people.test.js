@@ -85,7 +85,6 @@ describe('TESTANDO A API - REQUISIÇÃO POST', () => {
         sinon.stub(fs.promises, 'readFile')
     .resolves(mockFilePOST);
     });
-    
     afterEach(() => {
         sinon.restore();
     });
